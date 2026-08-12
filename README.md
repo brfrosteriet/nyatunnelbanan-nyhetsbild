@@ -176,3 +176,17 @@ docker run --rm -v "$PWD":/workspace -w /workspace -e TZ=Europe/Stockholm \
 Deployment uses the GitHub Pages artifact flow, configured under
 **Settings > Pages > Source: GitHub Actions**. The workflow needs no secrets; its
 `permissions:` block grants the Pages access it uses.
+
+---
+
+## License and the news content
+
+The code in this repository is MIT licensed, copyright
+Bostadsrättsföreningen Rosteriet. See [LICENSE](LICENSE). It is provided as is,
+without warranty: anyone reusing it should check for themselves that the image it
+publishes is current.
+
+**That covers the code only.** The headlines, dates and links shown in the image
+belong to Region Stockholm / nyatunnelbanan.se and are not licensed here. This
+repository never stores any of that material: the generated image exists only on
+the published GitHub Pages site, which is why `dist/` is not committed.
