@@ -1,0 +1,10 @@
+{
+  "name": "nyatunnelbanan-nyhetsbild",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:26-bookworm",
+  "remoteUser": "node",
+  "workspaceFolder": "/workspace",
+  "containerEnv": {
+    "TZ": "Europe/Stockholm"
+  },
+  "postCreateCommand": "node --version && node build.mjs && ls -l dist"
+}
