@@ -1,0 +1,3 @@
+# Generated output: built by the workflow and deployed to GitHub Pages.
+# Never commit these; the repo stays free of generated noise.
+dist/
