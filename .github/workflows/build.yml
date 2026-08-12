@@ -1,0 +1,45 @@
+name: Build news image
+
+on:
+  schedule:
+    - cron: '17 4 * * *' # once daily; offset minute to dodge cron congestion
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 26
+
+      # Fails the job if the news API is unreachable or empty. That is
+      # deliberate: the deploy steps below never run, so Pages keeps serving
+      # the last good image instead of a "could not fetch news" placeholder.
+      - name: Render the news image
+        run: node build.mjs
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
