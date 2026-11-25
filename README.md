@@ -160,8 +160,7 @@ node build.mjs      # writes dist/nyheter.svg and dist/index.html
 ```
 
 Requires Node with built-in `fetch` and full ICU (for Swedish month names). CI uses
-Node 26. Note that Node 26 becomes an LTS release in October 2026; until then it is
-the "Current" line. Bumping `node-version` in
+Node 26, the Active LTS line since October 2026. Bumping `node-version` in
 [.github/workflows/build.yml](.github/workflows/build.yml) is safe.
 
 If you would rather not install Node locally, this repository has a dev container
@@ -170,7 +169,7 @@ in VS Code and choose "Reopen in Container", or run the build in Docker directly
 
 ```sh
 docker run --rm -v "$PWD":/workspace -w /workspace -e TZ=Europe/Stockholm \
-  mcr.microsoft.com/devcontainers/javascript-node:26-bookworm node build.mjs
+  mcr.microsoft.com/devcontainers/javascript-node:26-trixie node build.mjs
 ```
 
 Deployment uses the GitHub Pages artifact flow, configured under
