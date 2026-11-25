@@ -1,6 +1,6 @@
 {
   "name": "nyatunnelbanan-nyhetsbild",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:26-bookworm",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:26-trixie",
   "remoteUser": "node",
   "workspaceFolder": "/workspace",
   "containerEnv": {
