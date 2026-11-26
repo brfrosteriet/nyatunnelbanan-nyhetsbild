@@ -111,11 +111,16 @@ https://brfrosteriet.github.io/nyatunnelbanan-nyhetsbild/
 If the headlines there are current but the website still shows old ones, the CMS has
 made its own copy of the image. See the first known limitation below.
 
-**There is a red X on the Actions tab.** That is the intended alarm. It means
-nyatunnelbanan.se could not be reached, or answered with nothing. The job stops
-*before* publishing, so the website keeps showing the last image that worked. Slightly
-old news is much better than an error message on a public website. Click the failed run
-to read the reason. In most cases the next daily run fixes itself.
+**There is a red X on the Actions tab.** Click the failed run to see which of its two
+jobs failed.
+
+- **`build` failed:** that is the intended alarm. It means nyatunnelbanan.se could not
+  be reached, or answered with nothing. Nothing is published, so the website keeps
+  showing the last image that worked. Slightly old news is much better than an error
+  message on a public website. In most cases the next daily run fixes itself.
+- **`deploy` failed:** the image was built but GitHub Pages did not take it, usually a
+  passing problem at GitHub. Press **Re-run failed jobs**, which retries only the
+  publishing step with the image already built.
 
 **Scheduled runs stop after 60 days.** GitHub disables scheduled jobs in public
 repositories after 60 days without any repository activity, and sends an email before
