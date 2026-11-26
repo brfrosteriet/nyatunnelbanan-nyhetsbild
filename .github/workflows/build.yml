@@ -17,11 +17,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
 
@@ -30,8 +27,8 @@ jobs:
           node-version: 26
 
       # Fails the job if the news API is unreachable or empty. That is
-      # deliberate: the deploy steps below never run, so Pages keeps serving
-      # the last good image instead of a "could not fetch news" placeholder.
+      # deliberate: the deploy job never runs, so Pages keeps serving the last
+      # good image instead of a "could not fetch news" placeholder.
       - name: Render the news image
         run: node build.mjs
 
@@ -44,5 +41,30 @@ jobs:
         with:
           path: dist
 
+  # Deploying in a job of its own, not right after the upload, works around
+  # actions/deploy-pages#451: the artifact lookup can come back empty for an
+  # artifact finalized under a second earlier. A separate job also means
+  # "Re-run failed jobs" retries only this deploy against the artifact that
+  # already exists; re-running a single upload-and-deploy job uploads a second
+  # artifact and fails on "Multiple artifacts named github-pages".
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment-retry.outputs.page_url }}
+    steps:
+      # The lookup has been seen to lag by up to about 46 seconds, so a miss
+      # gets one more attempt a minute later. A miss fails before any
+      # deployment is created, so the retry starts clean.
       - id: deployment
+        uses: actions/deploy-pages@v5
+        continue-on-error: true
+
+      - name: Wait before retrying the deploy
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 60
+
+      - id: deployment-retry
+        if: steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@v5
